@@ -1,0 +1,18 @@
+body {
+    background-color: #FFFFFF;
+    font-family: 'Catamaran', sans-serif;
+    font-size: 16px;
+    position: relative;
+}
+.affix {
+    top: 20px;
+}
+div.col-sm-9 div {
+    height: auto;
+    padding: 20px;
+}
+#section1 {color: #fff; background-color: #1E88E5;}
+#section2 {color: #fff; background-color: #673ab7;}
+#section3 {color: #fff; background-color: #ff9800;}
+#section41 {color: #fff; background-color: #00bcd4;}
+#section42 {color: #fff; background-color: #009688;}
