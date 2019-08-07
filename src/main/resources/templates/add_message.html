@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>Create Message Page</title>
+</head>
+<body>
+
+<div class="container">
+    <form action="/add_message" method="post">
+        <div class="form-group">
+            <label>Full Name:</label>
+            <input type="text" class="form-control" name="full_name">
+        </div>
+        <div class="form-group">
+            <label>visitor Info:</label>
+            <input type="text" class="form-control" name="visitor_info">
+        </div>
+        <div class="form-group">
+            <label>Pass Type:</label>
+            <input type="text" class="form-control" name="pass_type">
+        </div>
+        <div>
+            <label>Department: </label>
+            <select name="department_name" class="custom-select mb-3">
+                <option th:each="department : ${CORE_DEPARTMENTS}"
+                        th:text="${department.dep_name}"
+                        th:value="${department.department_id}">Select
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Cabinet:</label>
+            <input type="text" class="form-control" name="cabinet">
+        </div>
+        <div class="form-group">
+            <label>Beginning Time:</label>
+            <input type="text" class="form-control" name="begin_time">
+        </div>
+        <div class="form-group">
+            <label>Ending Time:</label>
+            <input type="text" class="form-control" name="end_time">
+        </div>
+        <div class="form-group">
+            <label>Phone Number:</label>
+            <input type="text" class="form-control" name="phone_number">
+        </div>
+        <div class="form-group">
+            <label>Vising Name:</label>
+            <select name="vising_name" class="custom-select mb-3">
+                <option th:each="user:${Core_Users}"
+                        th:text="${user.full_name}"
+                        th:value="${user.user_id}">Select
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Cancel</button>
+    </form>
+</div>
+
+</body>
+</html>
