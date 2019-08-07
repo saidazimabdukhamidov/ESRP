@@ -33,7 +33,7 @@ public class readMessage {
   public String show(Model model) {
     ArrayList<Application> application = new ArrayList<>();
     try {
-      conn = hds.getConnection(hds);
+      conn = hds.getConnection();
       ps = conn.prepareStatement("select * from APPLICATION");
       ps.execute();
       rs = ps.getResultSet();

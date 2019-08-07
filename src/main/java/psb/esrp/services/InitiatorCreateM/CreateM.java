@@ -20,24 +20,27 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 //@Repository
+
 @Service
 @Controller
 public class CreateM {
-  //@Autowired
-   HikariDataSource hds;
+    @Autowired
+    HikariDataSource hds;
     Connection conn=null;
     Connection conn1=null;
     PreparedStatement ps=null;
+    PreparedStatement ps1=null;
     CallableStatement cs=null;
     ResultSet rs=null;
+    ResultSet rs1=null;
 
     @GetMapping("/add_message")
     public String get(Model model){
         ArrayList<Core_Departments> department =new ArrayList<>();
         ArrayList<Core_Users> users=new ArrayList<>();
         try{
-            conn=hds.getConnection();
-            ps=conn.prepareStatement("Select * from Core_Departments");
+            conn = hds.getConnection();
+            ps = conn.prepareStatement("Select * from ESRP.CORE_DEPARTMENTS");
             ps.execute();
             rs=ps.getResultSet();
             while(rs.next())
@@ -51,13 +54,13 @@ public class CreateM {
 
 
             conn1=hds.getConnection();
-            ps=conn1.prepareStatement("Select user_id, full_name from core_users");
-            ps.execute();
-            rs=ps.getResultSet();
-            while(rs.next()){
+            ps1=conn1.prepareStatement("Select user_id, full_name from ESRP.CORE_USERS");
+            ps1.execute();
+            rs1=ps1.getResultSet();
+            while(rs1.next()){
                 Core_Users user = new Core_Users();
-                user.setUser_id(rs.getInt("user_id"));
-                user.setFull_name(rs.getString("full_name"));
+                user.setUser_id(rs1.getInt("user_id"));
+                user.setFull_name(rs1.getString("full_name"));
                 users.add(user);
                 model.addAttribute(user);
             }
@@ -85,10 +88,10 @@ public class CreateM {
             String begin_time = request.getParameter("begin_time");
             String end_time = request.getParameter("end_time");
             Integer phone_number = Integer.parseInt(request.getParameter("phone_number"));
-            Integer vising_id=Integer.parseInt(request.getParameter("vising_name"));
+            Integer vising_id=Integer.parseInt(request.getParameter("full_name"));
 
             conn = hds.getConnection();
-            cs = conn.prepareCall("{call application_insert(?,?,?,?,?,?,?,?,?)}");
+            cs = conn.prepareCall("{call core_pck.application(?,?,?,?,?,?,?,?,?)}");
             cs.setString(1, visitor_name);
             cs.setString(2, visitor_info);
             cs.setString(3, pass_type);

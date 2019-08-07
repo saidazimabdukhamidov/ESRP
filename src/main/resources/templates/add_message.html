@@ -28,9 +28,9 @@
         <div>
             <label>Department: </label>
             <select name="department_name" class="custom-select mb-3">
-                <option th:each="department : ${CORE_DEPARTMENTS}"
+                <option th:each="department : ${Core_Departments}"
                         th:text="${department.dep_name}"
-                        th:value="${department.department_id}">Select
+                        th:value="${department.department_id}">
                 </option>
             </select>
         </div>
@@ -52,10 +52,10 @@
         </div>
         <div class="form-group">
             <label>Vising Name:</label>
-            <select name="vising_name" class="custom-select mb-3">
-                <option th:each="user:${Core_Users}"
+            <select name="full_name" class="custom-select mb-3">
+                <option th:each="user : ${Core_Users}"
                         th:text="${user.full_name}"
-                        th:value="${user.user_id}">Select
+                        th:value="${user.user_id}">
                 </option>
             </select>
         </div>
