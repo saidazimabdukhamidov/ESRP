@@ -1,23 +1,19 @@
 package psb.esrp.services.initiator;
-//PostMapping
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import psb.esrp.models.Application;
-import psb.esrp.utils.DB;
+import psb.esrp.utils.dataBase;
 import psb.esrp.utils.dateFormatter;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
 
 @Controller
 public class readMessage {
@@ -57,16 +53,13 @@ public class readMessage {
         application.add(applications);
       }
       model.addAttribute("applications", application);
-
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
-      DB.done(conn);
-      DB.done(ps);
-      DB.done(rs);
+      dataBase.done(conn);
+      dataBase.done(ps);
+      dataBase.done(rs);
     }
     return "index";
   }
 }
-
-

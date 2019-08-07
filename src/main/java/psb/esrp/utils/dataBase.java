@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class DB {
+public class dataBase {
   public static void done(Connection obj) {
     try {
       if (obj != null) {
