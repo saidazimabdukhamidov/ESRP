@@ -11,14 +11,13 @@ import java.util.Date;
 @NoArgsConstructor
 
 public class Application {
-
   private Integer application_id;
   private String visitor_name;
   private String visitor_info;
   private Integer department_id;
   private Integer cabinet_number;
-  private Date begin_time;
-  private Date end_time;
+  private String begin_time;
+  private String end_time;
   private Integer phone_number;
   private Integer vising_id;
   private Integer state_id;
