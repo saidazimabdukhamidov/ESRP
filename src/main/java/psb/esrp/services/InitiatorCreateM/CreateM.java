@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import psb.esrp.models.Core_Departments;
 import psb.esrp.models.Core_Users;
+import psb.esrp.models.Permission_type;
 import psb.esrp.utils.DB;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,9 +34,24 @@ public class CreateM {
 
     @GetMapping("/add_message")
     public String get(Model model){
+        ArrayList<Permission_type> permission =new ArrayList<>();
         ArrayList<Core_Departments> department =new ArrayList<>();
         ArrayList<Core_Users> users=new ArrayList<>();
+
         try{
+            conn=hds.getConnection();
+            ps=conn.prepareStatement("Select * from ESRP.PERMISSION_TYPE");
+            ps.execute();
+            rs=ps.getResultSet();
+            while(rs.next()){
+                Permission_type type=new Permission_type();
+                type.setPerm_id(rs.getInt("perm_id"));
+                type.setPerm_name(rs.getString("perm_name"));
+                permission.add(type);
+            }
+            model.addAttribute("Permission_type", permission);
+
+
             conn = hds.getConnection();
             ps = conn.prepareStatement("Select * from ESRP.CORE_DEPARTMENTS");
             ps.execute();
@@ -73,16 +89,14 @@ public class CreateM {
     }
 
 
-
     @PostMapping("/add_message")
     public String createMessage(HttpServletRequest request) {
 
-        //int application_id=0;
         try {
 
             String visitor_name = request.getParameter("visitor_name");
             String visitor_info = request.getParameter("visitor_info");
-            String pass_type = request.getParameter("type_id");
+            Integer type_id = Integer.parseInt(request.getParameter("perm_name"));
             Integer department_id=Integer.parseInt(request.getParameter("department_name"));
             Integer cabinet_number = Integer.parseInt(request.getParameter("cabinet_number"));
             String begin_time = request.getParameter("begin_time");
@@ -94,7 +108,7 @@ public class CreateM {
             cs = conn.prepareCall("{call ESRP.core_pck.application(?,?,?,?,?,?,?,?,?)}");
             cs.setString(1, visitor_name);
             cs.setString(2, visitor_info);
-            cs.setString(3, pass_type);
+            cs.setInt(3, type_id);
             cs.setInt(4,department_id);
             cs.setInt(5, cabinet_number);
             cs.setString(6, begin_time);

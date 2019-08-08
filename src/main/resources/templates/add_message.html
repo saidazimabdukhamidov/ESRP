@@ -23,7 +23,12 @@
         </div>
         <div class="form-group">
             <label>Pass Type:</label>
-            <input type="text" class="form-control" name="pass_type">
+            <select name="perm_name" class="custom-select mb-3">
+                <option th:each="per:${Permission_type}"
+                th:text="${per.perm_name}"
+                th:value="${per.perm_id}">
+                </option>
+            </select>
         </div>
         <div>
             <label>Department: </label>
