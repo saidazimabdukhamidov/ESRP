@@ -19,7 +19,7 @@ public class Application {
   private String begin_time;
   private String end_time;
   private Integer phone_number;
-  private Integer vising_id;
+  private Integer user_id;
   private Integer state_id;
   private String created_by;
   private Date created_on;

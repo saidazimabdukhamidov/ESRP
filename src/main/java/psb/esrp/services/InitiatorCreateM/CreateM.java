@@ -27,12 +27,9 @@ public class CreateM {
     @Autowired
     HikariDataSource hds;
     Connection conn=null;
-    Connection conn1=null;
     PreparedStatement ps=null;
-    PreparedStatement ps1=null;
     CallableStatement cs=null;
     ResultSet rs=null;
-    ResultSet rs1=null;
 
     @GetMapping("/add_message")
     public String get(Model model){
@@ -53,33 +50,36 @@ public class CreateM {
             model.addAttribute("Core_Departments", department);
 
 
-            conn1=hds.getConnection();
-            ps1=conn1.prepareStatement("Select user_id, full_name from ESRP.CORE_USERS");
-            ps1.execute();
-            rs1=ps1.getResultSet();
-            while(rs1.next()){
+            conn=hds.getConnection();
+            ps=conn.prepareStatement("select cu.user_id, cu.full_name\n" +
+                    "    from CORE_USERS cu inner join ESRP_USER_ROLES eur on " +
+                    "eur.USER_ID=cu.USER_ID inner join ESRP_ROLES er on " +
+                    "er.ROLE_ID=eur.ROLE_ID");
+           ps.execute();
+           rs=ps.getResultSet();
+            while(rs.next()){
                 Core_Users user = new Core_Users();
-                user.setUser_id(rs1.getInt("user_id"));
-                user.setFull_name(rs1.getString("full_name"));
+                user.setUser_id(rs.getInt("user_id"));
+                user.setFull_name(rs.getString("full_name"));
                 users.add(user);
-                model.addAttribute(user);
+
             }
+            model.addAttribute("Core_Users", users);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-//        }finally {
-//            DB.done(conn);
-//            DB.done(ps);
-//            DB.done(rs);
-//        }
     return "add_message";
     }
+
+
 
     @PostMapping("/add_message")
     public String createMessage(HttpServletRequest request) {
 
+        //int application_id=0;
         try {
+
             String visitor_name = request.getParameter("visitor_name");
             String visitor_info = request.getParameter("visitor_info");
             String pass_type = request.getParameter("type_id");
@@ -88,10 +88,10 @@ public class CreateM {
             String begin_time = request.getParameter("begin_time");
             String end_time = request.getParameter("end_time");
             Integer phone_number = Integer.parseInt(request.getParameter("phone_number"));
-            Integer vising_id=Integer.parseInt(request.getParameter("full_name"));
+            Integer user_id=Integer.parseInt(request.getParameter("full_name"));
 
             conn = hds.getConnection();
-            cs = conn.prepareCall("{call core_pck.application(?,?,?,?,?,?,?,?,?)}");
+            cs = conn.prepareCall("{call ESRP.core_pck.application(?,?,?,?,?,?,?,?,?)}");
             cs.setString(1, visitor_name);
             cs.setString(2, visitor_info);
             cs.setString(3, pass_type);
@@ -100,7 +100,7 @@ public class CreateM {
             cs.setString(6, begin_time);
             cs.setString(7, end_time);
             cs.setInt(8, phone_number);
-            cs.setInt(9, vising_id);
+            cs.setInt(9, user_id);
             int result = cs.executeUpdate();
 
             if (result>0) {
@@ -111,7 +111,7 @@ public class CreateM {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DB.done(conn1);
+            DB.done(conn);
             DB.done(ps);
             DB.done(rs);
         }

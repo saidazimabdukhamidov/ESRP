@@ -47,7 +47,7 @@ public class readMessage {
         applications.setBegin_time(rs.getString("begin_time"));
         applications.setEnd_time(rs.getString("end_time"));
         applications.setPhone_number(rs.getInt("phone_number"));
-        applications.setVising_id(rs.getInt("visiting_id"));
+        applications.setUser_id(rs.getInt("visiting_id"));
         applications.setState_id(rs.getInt("state_id"));
         applications.setCreated_by(rs.getString("created_by"));
         applications.setCreated_on(rs.getDate("created_on"));
