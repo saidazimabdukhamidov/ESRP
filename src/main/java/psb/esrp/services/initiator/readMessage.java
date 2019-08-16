@@ -34,7 +34,10 @@ public class readMessage {
     ArrayList<Application> application = new ArrayList<>();
     try {
       conn = hds.getConnection();
-      ps = conn.prepareStatement("select * from APPLICATION");
+      ps = conn.prepareStatement("select application_id, " +
+              "visitor_name, visitor_info, department_id, " +
+              "cabinet_number, begin_time, end_time, phone_number, " +
+              "user_id, type_id, object_name from APPLICATION");
       ps.execute();
       rs = ps.getResultSet();
       while (rs.next()) {
@@ -47,11 +50,7 @@ public class readMessage {
         applications.setBegin_time(rs.getString("begin_time"));
         applications.setEnd_time(rs.getString("end_time"));
         applications.setPhone_number(rs.getInt("phone_number"));
-        applications.setUser_id(rs.getInt("visiting_id"));
-        applications.setState_id(rs.getInt("state_id"));
-        applications.setCreated_by(rs.getString("created_by"));
-        applications.setCreated_on(rs.getDate("created_on"));
-        applications.setRejection(rs.getString("rejection"));
+        applications.setUser_id(rs.getInt("user_id"));
         applications.setType_id(rs.getInt("type_id"));
         applications.setObject_name(rs.getString("object_name"));
         application.add(applications);
@@ -65,7 +64,7 @@ public class readMessage {
       DB.done(ps);
       DB.done(rs);
     }
-    return "index";
+    return "show_message";
   }
 }
 

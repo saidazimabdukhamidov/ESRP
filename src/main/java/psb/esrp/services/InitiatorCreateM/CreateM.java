@@ -118,7 +118,7 @@ public class CreateM {
             int result = cs.executeUpdate();
 
             if (result>0) {
-                return "redirect:/next?msg=success";
+                return "redirect:/read?msg=success";
             }else
                 return "redirect:/add_message?msg=unsuccess";
 
@@ -130,7 +130,7 @@ public class CreateM {
             DB.done(rs);
         }
 
-        return "redirect:/next?msg=success";
+        return "redirect:/read?msg=success";
     }
 
 }
