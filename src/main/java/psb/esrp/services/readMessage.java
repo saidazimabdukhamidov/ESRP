@@ -1,23 +1,19 @@
-package psb.esrp.services.initiator;
-//PostMapping
+package psb.esrp.services;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import psb.esrp.models.Application;
 import psb.esrp.utils.DB;
 import psb.esrp.utils.dateFormatter;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
 
 @Controller
 public class readMessage {
@@ -37,7 +33,7 @@ public class readMessage {
       ps = conn.prepareStatement("select application_id, " +
               "visitor_name, visitor_info, department_id, " +
               "cabinet_number, begin_time, end_time, phone_number, " +
-              "user_id, type_id, object_name from APPLICATION");
+              "user_id, type_id, object_name from ESRP.APPLICATION");
       ps.execute();
       rs = ps.getResultSet();
       while (rs.next()) {
@@ -56,7 +52,6 @@ public class readMessage {
         application.add(applications);
       }
       model.addAttribute("applications", application);
-
     } catch (Exception e) {
       e.printStackTrace();
     } finally {
@@ -67,5 +62,3 @@ public class readMessage {
     return "show_message";
   }
 }
-
-

@@ -1,4 +1,4 @@
-package psb.esrp.services.InitiatorCreateM;
+package psb.esrp.services;
 
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -28,37 +28,37 @@ public class CreateM {
     @Autowired
     HikariDataSource hds;
     Connection conn=null;
+    Connection conn1=null;
     PreparedStatement ps=null;
+    PreparedStatement ps1=null;
     CallableStatement cs=null;
     ResultSet rs=null;
+    ResultSet rs1=null;
 
     @GetMapping("/add_message")
     public String get(Model model){
-        ArrayList<Permission_type> permission =new ArrayList<>();
+        ArrayList<Permission_type> perm = new ArrayList<>();
         ArrayList<Core_Departments> department =new ArrayList<>();
-        ArrayList<Core_Users> users=new ArrayList<>();
-
+        ArrayList<Core_Users> users = new ArrayList<>();
         try{
-            conn=hds.getConnection();
-            ps=conn.prepareStatement("Select * from ESRP.PERMISSION_TYPE");
+            conn = hds.getConnection();
+            ps=conn.prepareStatement("SELECT * from ESRP.PERMISSION_TYPE" );
             ps.execute();
             rs=ps.getResultSet();
             while(rs.next()){
-                Permission_type type=new Permission_type();
-                type.setPerm_id(rs.getInt("perm_id"));
-                type.setPerm_name(rs.getString("perm_name"));
-                permission.add(type);
+                Permission_type permission = new Permission_type();
+                permission.setPerm_id(rs.getInt("perm_id"));
+                permission.setPerm_name(rs.getString("perm_name"));
+                perm.add(permission);
             }
-            model.addAttribute("Permission_type", permission);
+            model.addAttribute("Permission_type", perm);
 
-
-            conn = hds.getConnection();
             ps = conn.prepareStatement("Select * from ESRP.CORE_DEPARTMENTS");
             ps.execute();
             rs=ps.getResultSet();
             while(rs.next())
             {
-                Core_Departments dep=new Core_Departments();
+                Core_Departments dep = new Core_Departments();
                 dep.setDepartment_id(rs.getInt("department_id"));
                 dep.setDep_name(rs.getString("dep_name"));
                 department.add(dep);
@@ -66,17 +66,14 @@ public class CreateM {
             model.addAttribute("Core_Departments", department);
 
 
-            conn=hds.getConnection();
-            ps=conn.prepareStatement("select cu.user_id, cu.full_name\n" +
-                    "    from CORE_USERS cu inner join ESRP_USER_ROLES eur on " +
-                    "eur.USER_ID=cu.USER_ID inner join ESRP_ROLES er on " +
-                    "er.ROLE_ID=eur.ROLE_ID");
-           ps.execute();
-           rs=ps.getResultSet();
-            while(rs.next()){
+            conn1=hds.getConnection();
+            ps1=conn1.prepareStatement("Select user_id, full_name from ESRP.CORE_USERS");
+            ps1.execute();
+            rs1=ps1.getResultSet();
+            while(rs1.next()){
                 Core_Users user = new Core_Users();
-                user.setUser_id(rs.getInt("user_id"));
-                user.setFull_name(rs.getString("full_name"));
+                user.setUser_id(rs1.getInt("user_id"));
+                user.setFull_name(rs1.getString("full_name"));
                 users.add(user);
 
             }
@@ -88,12 +85,10 @@ public class CreateM {
     return "add_message";
     }
 
-
     @PostMapping("/add_message")
     public String createMessage(HttpServletRequest request) {
 
         try {
-
             String visitor_name = request.getParameter("visitor_name");
             String visitor_info = request.getParameter("visitor_info");
             Integer type_id = Integer.parseInt(request.getParameter("perm_name"));
@@ -105,7 +100,7 @@ public class CreateM {
             Integer user_id=Integer.parseInt(request.getParameter("full_name"));
 
             conn = hds.getConnection();
-            cs = conn.prepareCall("{call ESRP.core_pck.application(?,?,?,?,?,?,?,?,?)}");
+            cs = conn.prepareCall("{call ESRP.CORE_PKG.insertApp(?,?,?,?,?,?,?,?,?)}");
             cs.setString(1, visitor_name);
             cs.setString(2, visitor_info);
             cs.setInt(3, type_id);
@@ -125,7 +120,7 @@ public class CreateM {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DB.done(conn);
+            DB.done(conn1);
             DB.done(ps);
             DB.done(rs);
         }

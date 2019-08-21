@@ -24,7 +24,7 @@
             <label>Pass Type:</label>
             <select name="perm_name" class="custom-select mb-3">
                 <option th:each="per:${Permission_type}"
-                th:text="${per.perm_name}"
+                        th:text="${per.perm_name}"
                         th:value="${per.perm_id}">
                 </option>
             </select>
