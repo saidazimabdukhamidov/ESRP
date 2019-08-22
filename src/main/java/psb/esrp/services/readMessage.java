@@ -45,7 +45,7 @@ public class readMessage {
         applications.setCabinet_number(rs.getInt("cabinet_number"));
         applications.setBegin_time(rs.getString("begin_time"));
         applications.setEnd_time(rs.getString("end_time"));
-        applications.setPhone_number(rs.getInt("phone_number"));
+        applications.setPhone_number(rs.getString("phone_number"));
         applications.setUser_id(rs.getInt("user_id"));
         applications.setType_id(rs.getInt("type_id"));
         applications.setObject_name(rs.getString("object_name"));

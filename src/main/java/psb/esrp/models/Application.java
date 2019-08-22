@@ -18,7 +18,7 @@ public class Application {
   private Integer cabinet_number;
   private String begin_time;
   private String end_time;
-  private Integer phone_number;
+  private String phone_number;
   private Integer user_id;
   private Integer state_id;
   private String created_by;

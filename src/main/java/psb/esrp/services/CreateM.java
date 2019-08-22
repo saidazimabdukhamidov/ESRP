@@ -42,7 +42,7 @@ public class CreateM {
         ArrayList<Core_Users> users = new ArrayList<>();
         try{
             conn = hds.getConnection();
-            ps=conn.prepareStatement("SELECT * from ESRP.PERMISSION_TYPE" );
+            ps=conn.prepareStatement("SELECT * from ESRP.PERMISSION_TYPE");
             ps.execute();
             rs=ps.getResultSet();
             while(rs.next()){
@@ -87,8 +87,9 @@ public class CreateM {
 
     @PostMapping("/add_message")
     public String createMessage(HttpServletRequest request) {
-
+//            int application_id=0;
         try {
+            Integer application_id = Integer.parseInt(request.getParameter("application_id"));
             String visitor_name = request.getParameter("visitor_name");
             String visitor_info = request.getParameter("visitor_info");
             Integer type_id = Integer.parseInt(request.getParameter("perm_name"));
@@ -96,31 +97,42 @@ public class CreateM {
             Integer cabinet_number = Integer.parseInt(request.getParameter("cabinet_number"));
             String begin_time = request.getParameter("begin_time");
             String end_time = request.getParameter("end_time");
-            Integer phone_number = Integer.parseInt(request.getParameter("phone_number"));
+            String phone_number = request.getParameter("phone_number");
             Integer user_id=Integer.parseInt(request.getParameter("full_name"));
 
             conn = hds.getConnection();
-            cs = conn.prepareCall("{call ESRP.CORE_PKG.insertApp(?,?,?,?,?,?,?,?,?)}");
-            cs.setString(1, visitor_name);
-            cs.setString(2, visitor_info);
-            cs.setInt(3, type_id);
-            cs.setInt(4,department_id);
-            cs.setInt(5, cabinet_number);
-            cs.setString(6, begin_time);
-            cs.setString(7, end_time);
-            cs.setInt(8, phone_number);
-            cs.setInt(9, user_id);
-            int result = cs.executeUpdate();
-
+//            cs = conn.prepareCall("{call esrp_package.insertApplication(?,?,?,?,?,?,?,?,?)}");
+            ps=conn.prepareStatement("Insert into ESRP.APPLICATION ( APPLICATION_ID, VISITOR_NAME, " +
+                    "VISITOR_INFO, " +
+                    "TYPE_ID, " +
+                    "DEPARTMENT_ID, " +
+                    "CABINET_NUMBER, " +
+                    "BEGIN_TIME, " +
+                    "END_TIME, " +
+                    "PHONE_NUMBER, " +
+                    "USER_ID) " +
+                    "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setInt(1, application_id);
+            ps.setString(2, visitor_name);
+            ps.setString(3, visitor_info);
+            ps.setInt(4, type_id);
+            ps.setInt(5,department_id);
+            ps.setInt(6, cabinet_number);
+            ps.setString(7, begin_time);
+            ps.setString(8, end_time);
+            ps.setString(9, phone_number);
+            ps.setInt(10, user_id);
+            int result = ps.executeUpdate();
             if (result>0) {
                 return "redirect:/read?msg=success";
-            }else
+            }
+            else
                 return "redirect:/add_message?msg=unsuccess";
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            DB.done(conn1);
+            DB.done(conn);
             DB.done(ps);
             DB.done(rs);
         }
